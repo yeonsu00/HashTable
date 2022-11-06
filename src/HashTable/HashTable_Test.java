@@ -4,23 +4,25 @@ import java.util.LinkedList;
 // HashTable 클래스
 class HashTable {
 
+    // 데이터를 저장할 리스트를 배열로 선언 -> 배열에 저장될 데이터의 타입을 LinkedList로 만든다.
+    LinkedList<Node>[] table;
+
     // HashTable에 저장할 데이터를 담는다.
     class Node {
         // 검색어: 키
         String key;
         // 검색 결과: value값
         String value;
+        Node next;
 
         // 생성자 노드 생성
         public Node(String key, String value) {
             super();
             this.key = key;
             this.value = value;
+            this.next = null;
         }
     }
-
-    // 데이터를 저장할 리스트를 배열로 선언 -> 배열에 저장될 데이터의 타입을 LinkedList로 만든다.
-    LinkedList<Node>[] table;
 
     // 해시 테이블을 만드는 순간 배열 사이즈를 얼마만큼 할건지 미리 선언
     public HashTable(int size) {
@@ -41,7 +43,6 @@ class HashTable {
     public int getIndex(int hashCode) {
         return (hashCode % table.length);
     }
-
 
     Node searchNode(int index, String key) {
         LinkedList<Node> indexedList = table[index];
@@ -77,11 +78,11 @@ class HashTable {
         //해당 인덱스 버킷에 아무것도 있지 않을 때
         if (table[index] == null) {
             table[index] = new LinkedList<Node>();
-            table[index].add(new Node(key, value));
+            Node node = new Node(key, value);
+            table[index].add(node);
         }
         else {
             Node searched = searchNode(index, key);
-
             if (searched != null) { searched.value = value; }   //같은 key값이 있으면 덮어쓰기
             else { table[index].add(new Node(key, value)); }    //같은 key값이 없으면 value값 추가해주기
         }
@@ -96,6 +97,22 @@ class HashTable {
 
         if (searched == null) { return "Not Found"; }
         else { return searched.value; }
+    }
+
+    void deleteNode(String key){
+        int hashCode = getHashCode(key);
+        int index = getIndex(hashCode);
+        Node node = searchNode(index, key);
+        if(node==null) System.out.println("Not found");
+        else {
+            Node prev = head;
+            Node current = head.next;
+            while (current.key != node.key){
+                prev = current;
+                current = current.next;
+            }
+            prev.next = current.next;
+        }
     }
 }
 
@@ -118,6 +135,8 @@ public class HashTable_Test {
 
         // 없는 데이터 호출
         System.out.println(h.get("keyX"));
+
+        h.deleteNode("key1");
 
         h.printAllKeyValue(0);
         h.printAllKeyValue(1);
