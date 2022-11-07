@@ -13,14 +13,12 @@ class HashTable {
         String key;
         // 검색 결과: value값
         String value;
-        Node next;
 
         // 생성자 노드 생성
         public Node(String key, String value) {
             super();
             this.key = key;
             this.value = value;
-            this.next = null;
         }
     }
 
@@ -50,7 +48,6 @@ class HashTable {
         for (Node n : indexedList) {
             if (n.key == key) { return n; }
         }
-
         return null;
     }
 
@@ -78,8 +75,7 @@ class HashTable {
         //해당 인덱스 버킷에 아무것도 있지 않을 때
         if (table[index] == null) {
             table[index] = new LinkedList<Node>();
-            Node node = new Node(key, value);
-            table[index].add(node);
+            table[index].add(new Node(key, value));
         }
         else {
             Node searched = searchNode(index, key);
@@ -99,19 +95,12 @@ class HashTable {
         else { return searched.value; }
     }
 
-    void deleteNode(String key){
+    public void deleteNode(String key){
         int hashCode = getHashCode(key);
         int index = getIndex(hashCode);
         Node node = searchNode(index, key);
         if(node==null) System.out.println("Not found");
         else {
-//            Node prev = head;
-//            Node current = head.next;
-//            while (current.key != node.key){
-//                prev = current;
-//                current = current.next;
-//            }
-//            prev.next = current.next;
             table[index].remove(node);
         }
     }
@@ -130,15 +119,22 @@ public class HashTable_Test {
         // 덮어쓰기
         h.put("key1", "value1->reValue");
 
+        System.out.println("===== 존재하는 데이터 호출 =====");
         System.out.println(h.get("key1")); // key의 value를 반환
         System.out.println(h.get("키2"));
         System.out.println(h.get("key키3"));
 
-        // 없는 데이터 호출
+        System.out.println("===== 없는 데이터 호출 =====");
         System.out.println(h.get("keyX"));
 
-        h.deleteNode("key1");
+        System.out.println("===== 각 인덱스의 연결리스트에 든 모든 key값과 value값 출력 =====");
+        h.printAllKeyValue(0);
+        h.printAllKeyValue(1);
+        h.printAllKeyValue(2);
 
+        h.deleteNode("키2");
+
+        System.out.println("===== h.deleteNode(\"키2\"); 후 모든 key값과 value값 출력 =====");
         h.printAllKeyValue(0);
         h.printAllKeyValue(1);
         h.printAllKeyValue(2);
