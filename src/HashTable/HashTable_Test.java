@@ -105,13 +105,14 @@ class HashTable {
         Node node = searchNode(index, key);
         if(node==null) System.out.println("Not found");
         else {
-            Node prev = head;
-            Node current = head.next;
-            while (current.key != node.key){
-                prev = current;
-                current = current.next;
-            }
-            prev.next = current.next;
+//            Node prev = head;
+//            Node current = head.next;
+//            while (current.key != node.key){
+//                prev = current;
+//                current = current.next;
+//            }
+//            prev.next = current.next;
+            table[index].remove(node);
         }
     }
 }
