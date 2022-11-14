@@ -79,9 +79,26 @@ class HashTable {
         }
         else {
             Node searched = searchNode(index, key);
-            if (searched != null) { searched.value = value; }   //같은 key값이 있으면 덮어쓰기
+            if (searched != null) { //같은 key값이면 중단
+                System.out.println("다른 key값을 입력하여주세요");
+                return;
+            }
             else { table[index].add(new Node(key, value)); }    //같은 key값이 없으면 value값 추가해주기
         }
+    }
+
+    public void update(String key, String value){
+        //해시코드
+        int hashCode = getHashCode(key);
+        //배열 인덱스 번호
+        int index = getIndex(hashCode);
+        if (table[index] == null) {
+            System.out.println("해당 인덱스 버킷에 아무것도 있지 않습니다.");
+            return;
+        }
+
+        Node searched = searchNode(index, key);
+        if (searched != null) { searched.value = value; }
     }
 
     // get(): key를 받아서 value를 반환하는 함수
@@ -116,8 +133,11 @@ public class HashTable_Test {
         h.put("키2", "값2");
         h.put("key키3", "value값3");
 
-        // 덮어쓰기
+        // 덮어쓰기 -> 이제 update 메소드를 이용하여야 함.
         h.put("key1", "value1->reValue");
+
+        //덮어쓰기
+        h.update("key키3", "zz");
 
         System.out.println("===== 존재하는 데이터 호출 =====");
         System.out.println(h.get("key1")); // key의 value를 반환
