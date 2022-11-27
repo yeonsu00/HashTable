@@ -1,0 +1,11 @@
+put key1 value1
+put 키2 값2
+put key키3 value값3
+put key1 value1->reValue
+get key1
+get 키2
+get key키3
+get keyX
+printAllKeyValue 0
+printAllKeyValue 1
+printAllKeyValue 2

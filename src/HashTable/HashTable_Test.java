@@ -1,4 +1,5 @@
-//package HashTable;
+package HashTable;
+import java.io.*;
 import java.util.LinkedList;
 
 // HashTable 클래스
@@ -49,15 +50,18 @@ class HashTable {
         for (Node n : indexedList) {
             if (n.key == key) { return n; }
         }
-
         return null;
     }
 
     //printAllKeyValue() : index를 받아 해당되는 연결리스트의 모든 key값과 value값을 출력하는 함수
     void printAllKeyValue (int index) {
         LinkedList<Node> indexedList = table[index];
-        if (indexedList == null) return;
-        System.out.println("----인덱스" + index +"에 해당하는 연결리스트의 모든 key, value 값----");
+        System.out.println("<인덱스" + index +"에 해당하는 연결리스트의 모든 key, value 값>");
+
+        if (indexedList == null) {
+            System.out.println("해당 인덱스에 해당하는 값이 없습니다.");
+            return;
+        }
         for (Node node : indexedList) {
             if(node == null) return;
             System.out.println("key : " + node.key + "  //  value : " + node.value);
@@ -95,33 +99,77 @@ class HashTable {
         Node searched = searchNode(index, key);
 
         if (searched == null) { return "Not Found"; }
-        else { return searched.value; }
+        else {
+            return searched.value;
+        }
     }
 }
 
 
 public class HashTable_Test {
 
-    public static void main(String[] args) {
-        HashTable h = new HashTable(3);
+    public static void main(String[] args) throws IOException {
+//        HashTable h = new HashTable(3);
+//
+//        h.put("key1", "value1"); // key와 value를 받아 배열에 데이터를 저장
+//        h.put("키2", "값2");
+//        h.put("key키3", "value값3");
+//
+//        // 덮어쓰기
+//        h.put("key1", "value1->reValue");
+//
+//        System.out.println(h.get("key1")); // key의 value를 반환
+//        System.out.println(h.get("키2"));
+//        System.out.println(h.get("key키3"));
+//
+//        // 없는 데이터 호출
+//        System.out.println(h.get("keyX"));
+//
+//        h.printAllKeyValue(0);
+//        h.printAllKeyValue(1);
+//        h.printAllKeyValue(2);
+//
+//        System.out.println("\n\n\n\n\n\n\n\n");
 
-        h.put("key1", "value1"); // key와 value를 받아 배열에 데이터를 저장
-        h.put("키2", "값2");
-        h.put("key키3", "value값3");
+        HashTable hashTable = new HashTable(3);
+        try {
+            //파일 객체 생성
+            File file = new File("C:\\HashTable\\src\\File\\input.txt");
+            //입력 스트림 생성
+            FileReader filereader = new FileReader(file);
+            //입력 버퍼 생성
+            BufferedReader bufReader = new BufferedReader(filereader);
+            String line = "";
+            while((line = bufReader.readLine()) != null){
+                System.out.println("\n\ninput.txt파일에서 받은 input값 : " + line);
 
-        // 덮어쓰기
-        h.put("key1", "value1->reValue");
+                String[] split = line.split(" ");
+                String split1 = split[0];   // put get printAllKeyValue 중 하나
 
-        System.out.println(h.get("key1")); // key의 value를 반환
-        System.out.println(h.get("키2"));
-        System.out.println(h.get("key키3"));
+                if (split1.equals("put")) {
+                    System.out.println("put함수 실행\n-------------------------------------");
+                    String split2 = split[1];
+                    String split3 = split[2];
+                    hashTable.put(split2, split3);  // key와 value를 받아 배열에 데이터를 저장
+                }
+                if (split1.equals("get")) {
+                    System.out.println("get함수 실행\n-------------------------------------");
+                    String split2 = split[1];
+                    System.out.println(split2);
+                    System.out.println(hashTable.get(split2));  // key의 value를 반환
+                }
+                if (split1.equals("printAllKeyValue")) {
+                    System.out.println("printAllKeyValue함수 실행\n-------------------------------------");
+                    String split2 = split[1];
+                    int index = Integer.parseInt(split2);
+                    hashTable.printAllKeyValue(index);
+                }
+            }
+            bufReader.close();
+        } catch (FileNotFoundException e) {
 
-        // 없는 데이터 호출
-        System.out.println(h.get("keyX"));
-
-        h.printAllKeyValue(0);
-        h.printAllKeyValue(1);
-        h.printAllKeyValue(2);
+        } catch(IOException e){
+            System.out.println(e);
+        }
     }
-
 }
